@@ -1,7 +1,8 @@
 TOPDIR := $(realpath ..)
 
 SUBDIRS := \
-	anim \
+	xenium \
+	# anim \
 	# anim-polygons \
 	ball \
 	bobs3d \
