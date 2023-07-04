@@ -8,7 +8,7 @@ MODULE := JazzCat-DerKlang
 
 RLE2PNG = rle2png.py
 
-OBJECTS := data/$(MODULE).trk.o data/text-scroll.o
+OBJECTS := data/$(MODULE).trk.o
 
 ifeq ($(DELTA), 1)
 OBJECTS += data/$(MODULE)-Delta.smp.o
@@ -31,7 +31,6 @@ CLEAN-FILES := main.o \
 	data/pal-gold*.c \
 
 SOURCES := main.c logo.c
-
 MAIN := #
 
 PNG2C.ghostown-logo-crop := --pixmap ghostown_logo,192x131x4,+onlydata,+displayable
@@ -43,8 +42,9 @@ PNG2C.pal-gold := --palette pal_gold,16,+shared
 PNG2C.pal-gold-dark := --palette pal_gold_dark,16,+shared
 PNG2C.pal-gold-light := --palette pal_gold_light,16,+shared
 
-
 CPPFLAGS += -DINTRO -DVQ=$(VQ) -DDELTA=$(DELTA) -DKLANG=$(KLANG) -I.
+
+include $(TOPDIR)/build/effect.mk
 
 data/%.trk data/%.smp: data/%.mod
 	$(PYTHON3) data/ptsplit.py $^
@@ -75,14 +75,6 @@ data/%.smp.o: data/%.smp
 	  --redefine-sym _binary_data_$(subst -,_,$*)_smp_start=_Samples \
 	  --redefine-sym _binary_data_$(subst -,_,$*)_smp_end=_SamplesEnd \
 	  --redefine-sym _binary_data_$(subst -,_,$*)_smp_size=_SamplesSize \
-	  $^ $@
-
-data/%.o: data/%.txt
-	@echo "[OBJCOPY] $(DIR)$< -> $(DIR)$@"
-	$(OBJCOPY) -I binary -O amiga \
-	  --redefine-sym _binary_data_$(subst -,_,$*)_txt_start=_Text \
-	  --redefine-sym _binary_data_$(subst -,_,$*)_txt_end=_TextEnd \
-	  --redefine-sym _binary_data_$(subst -,_,$*)_txt_size=_TextSize \
 	  $^ $@
 
 data/%.png: data/%.rle
