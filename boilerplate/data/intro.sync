@@ -1,0 +1,17 @@
+@track EffectNumber
+# logo in
+$0000 0 !step
+@end
+
+@track GhostownLogoPal
+# logo in
+$0000 0 !step
+$0020 1 
+$0100 2
+$0120 3
+# logo out
+$3000 3
+$3010 2
+$3020 1
+$3030 0
+@end
