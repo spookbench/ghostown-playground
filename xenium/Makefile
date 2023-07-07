@@ -29,8 +29,9 @@ CLEAN-FILES := main.o \
 	data/ghostown-logo-crop.c \
 	data/ghostown-logo-0[1-3].c \
 	data/pal-gold*.c data/loader.c \
+	data/ecco-purple.c \
 
-SOURCES := main.c logo.c samples.c
+SOURCES := main.c logo.c samples.c ecco.c
 MAIN := #
 
 PNG2C.ghostown-logo-crop := --pixmap ghostown_logo,192x131x4,+onlydata,+displayable
@@ -43,6 +44,8 @@ PNG2C.pal-gold-dark := --palette pal_gold_dark,16,+shared
 PNG2C.pal-gold-light := --palette pal_gold_light,16,+shared
 
 PNG2C.loader := --bitmap loader,64x64x1 --palette loader_pal,2
+
+PNG2C.ecco-purple := --pixmap ecco_purple,320x240x4,+onlydata --palette ecco_purple_pal,11
 
 CPPFLAGS += -DINTRO -DVQ=$(VQ) -DDELTA=$(DELTA) -DKLANG=$(KLANG) -I.
 

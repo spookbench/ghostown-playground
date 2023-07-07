@@ -1,7 +1,7 @@
 TOPDIR := $(realpath ..)
 
 SUBDIRS := \
-	xenium \
+	ecco \
 	# anim \
 	# anim-polygons \
 	ball \
