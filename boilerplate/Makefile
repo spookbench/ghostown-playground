@@ -28,9 +28,9 @@ CLEAN-FILES := main.o \
 	data/$(MODULE)*.o data/$(MODULE).{smp,trk}* \
 	data/ghostown-logo-crop.c \
 	data/ghostown-logo-0[1-3].c \
-	data/pal-gold*.c \
+	data/pal-gold*.c data/loader.c \
 
-SOURCES := main.c logo.c
+SOURCES := main.c logo.c samples.c
 MAIN := #
 
 PNG2C.ghostown-logo-crop := --pixmap ghostown_logo,192x131x4,+onlydata,+displayable
@@ -41,6 +41,8 @@ PNG2C.ghostown-logo-03 := --palette ghostown_logo_3_pal,8
 PNG2C.pal-gold := --palette pal_gold,16,+shared
 PNG2C.pal-gold-dark := --palette pal_gold_dark,16,+shared
 PNG2C.pal-gold-light := --palette pal_gold_light,16,+shared
+
+PNG2C.loader := --bitmap loader,64x64x1 --palette loader_pal,2
 
 CPPFLAGS += -DINTRO -DVQ=$(VQ) -DDELTA=$(DELTA) -DKLANG=$(KLANG) -I.
 
