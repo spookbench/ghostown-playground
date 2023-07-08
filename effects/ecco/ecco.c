@@ -2,12 +2,15 @@
 #include <blitter.h>
 #include <copper.h>
 #include <color.h>
+#include <fx.h>
 #include <system/memory.h>
 #include <c2p_1x1_4.h>
 
 #define WIDTH 320
 #define HEIGHT 256
 #define DEPTH 4
+
+#define YSTART ((256 - HEIGHT) / 2)
 
 #include "data/ecco-purple.c"
 
@@ -42,6 +45,7 @@ static void Load(void) {
 }
 
 static void Init(void) {
+    short i, sh;
     screen = NewBitmap(WIDTH, HEIGHT, DEPTH);
 
     memcpy(screen->planes[0], ecco_purple.planes[0],
@@ -49,16 +53,30 @@ static void Init(void) {
     
     SetupPlayfield(MODE_LORES, DEPTH, X(0), Y(0), WIDTH, HEIGHT);
 
-    // {
-    //     short i = 0;
-
-    //     for (i = 0; i < (1 << DEPTH); i++)
-    //     SetColor(i, ecco_purple_pal.colors[0]);
-    // }
-
-    cp = NewCopList(40);
+    cp = NewCopList(700);
     CopInit(cp);
     CopSetupBitplanes(cp, NULL, screen, DEPTH);
+
+    // CopWait(cp, 0, 0);
+    // CopMove16(cp, bplcon1, 0);
+
+    // CopWait(cp, 100, 0);
+    // CopMove16(cp, bplcon1, 255);
+
+    // CopWait(cp, 220, 0);
+    // CopMove16(cp, bplcon1, 0);
+
+    for (i = 0; i < HEIGHT; i++) {
+      CopWaitSafe(cp, Y(YSTART + i), 0);
+      if (i % 2 == 0) {
+        sh = normfx(SIN(i*64));
+        CopMove16(cp, bplcon1, sh | sh);
+      } else {
+        sh = normfx(COS(i*32));
+        CopMove16(cp, bplcon1, (sh << 4) | sh);
+      }
+    }
+
     CopEnd(cp);
 
     CopListActivate(cp);
@@ -66,6 +84,10 @@ static void Init(void) {
     LoadPalette(&ecco_purple_pal, 0);
 
     EnableDMA(DMAF_RASTER);
+}
+
+static void Render(void) {
+  Log("eeee");
 }
 
 static void Kill(void) {
@@ -76,4 +98,4 @@ static void Kill(void) {
   DeleteBitmap(screen);
 }
 
-EFFECT(Ecco, Load, NULL, Init, Kill, NULL, NULL);
+EFFECT(Ecco, Load, NULL, Init, Kill, Render, NULL);
